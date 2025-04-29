@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Task Manager</title>
+    <title>Task Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -81,7 +81,6 @@
 
 <body class="bg-gray-100 min-h-screen transition-colors duration-300">
     <div class="container mx-auto px-4 py-8 max-w-6xl">
-        <!-- Header -->
         <header class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold text-indigo-700">Personal Task Manager</h1>
             <div class="flex items-center space-x-4">
@@ -95,9 +94,7 @@
             </div>
         </header>
 
-        <!-- Main Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Task Input Section -->
             <div class="lg:col-span-1 bg-white rounded-xl shadow-md p-6 dark:bg-gray-800 dark:text-white">
                 <h2 class="text-xl font-semibold mb-4">Add New Task</h2>
                 <form id="taskForm" class="space-y-4">
@@ -140,7 +137,6 @@
                     </div>
                 </form>
 
-                <!-- Progress Bar -->
                 <div class="mt-8">
                     <h3 class="text-lg font-medium mb-2">Today's Progress</h3>
                     <div class="flex items-center">
@@ -151,7 +147,6 @@
                     </div>
                 </div>
 
-                <!-- Categories Filter -->
                 <div class="mt-6">
                     <h3 class="text-lg font-medium mb-2">Filter by Category</h3>
                     <div class="flex flex-wrap gap-2">
@@ -164,7 +159,6 @@
                 </div>
             </div>
 
-            <!-- Task List Section -->
             <div class="lg:col-span-2">
                 <div class="bg-white rounded-xl shadow-md p-6 dark:bg-gray-800 dark:text-white">
                     <div class="flex justify-between items-center mb-6">
@@ -176,7 +170,6 @@
                     </div>
 
                     <div id="taskList" class="space-y-3">
-                        <!-- Tasks will be added here dynamically -->
                         <div class="text-center py-8 text-gray-500" id="emptyState">
                             <i class="fas fa-tasks text-4xl mb-2 text-gray-300"></i>
                             <p>No tasks yet. Add your first task!</p>
@@ -187,7 +180,6 @@
         </div>
     </div>
 
-    <!-- Calendar Modal -->
     <div id="calendarModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
         <div class="modal-content bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto dark:bg-gray-800 dark:text-white">
             <div class="p-6">
@@ -219,20 +211,17 @@
                 </div>
 
                 <div id="calendarGrid" class="grid grid-cols-7 gap-1">
-                    <!-- Calendar days will be generated here -->
                 </div>
 
                 <div id="dayTasksModal" class="mt-6 hidden">
                     <h3 id="selectedDayTitle" class="text-lg font-semibold mb-3">Tasks for June 1, 2023</h3>
                     <div id="dayTasksList" class="space-y-2">
-                        <!-- Tasks for selected day will appear here -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Edit Task Modal -->
     <div id="editTaskModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
         <div class="modal-content bg-white rounded-xl shadow-xl w-full max-w-md dark:bg-gray-800 dark:text-white">
             <div class="p-6">
@@ -296,7 +285,6 @@
     </div>
 
     <script>
-        // DOM Elements
         const taskForm = document.getElementById('taskForm');
         const taskList = document.getElementById('taskList');
         const emptyState = document.getElementById('emptyState');
@@ -315,7 +303,6 @@
         const taskCount = document.getElementById('taskCount');
         const categoryFilters = document.querySelectorAll('.category-filter');
 
-        // Calendar elements
         const calendarGrid = document.getElementById('calendarGrid');
         const currentMonthYear = document.getElementById('currentMonthYear');
         const prevMonthBtn = document.getElementById('prevMonthBtn');
@@ -324,19 +311,16 @@
         const selectedDayTitle = document.getElementById('selectedDayTitle');
         const dayTasksList = document.getElementById('dayTasksList');
 
-        // State
         let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         let currentFilter = 'All';
         let currentDate = new Date();
 
-        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             renderTasks();
             updateProgress();
             updateTaskCount();
             generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
 
-            // Check for saved theme preference
             if (localStorage.getItem('darkMode') === 'enabled') {
                 document.body.classList.add('dark-mode');
                 themeToggle.querySelector('.fa-moon').classList.add('hidden');
@@ -344,7 +328,6 @@
             }
         });
 
-        // Theme Toggle
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
 
@@ -359,7 +342,6 @@
             }
         });
 
-        // Add New Task
         taskForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -386,17 +368,14 @@
             updateProgress();
             updateTaskCount();
 
-            // Reset form
             taskForm.reset();
 
-            // Show animation for new task
             const newTaskElement = document.getElementById(`task-${task.id}`);
             if (newTaskElement) {
                 newTaskElement.classList.add('task-enter');
             }
         });
 
-        // Filter Tasks by Category
         categoryFilters.forEach(filter => {
             filter.addEventListener('click', () => {
                 currentFilter = filter.dataset.category;
@@ -412,7 +391,6 @@
             });
         });
 
-        // Clear Completed Tasks
         clearCompletedBtn.addEventListener('click', () => {
             tasks = tasks.filter(task => !task.completed);
             saveTasks();
@@ -421,7 +399,7 @@
             updateTaskCount();
         });
 
-        // Calendar Functions
+
         showCalendarBtn.addEventListener('click', () => {
             calendarModal.classList.remove('hidden');
         });
@@ -452,14 +430,12 @@
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const today = new Date();
 
-            // Add empty cells for days before the first day of the month
             for (let i = 0; i < firstDay; i++) {
                 const emptyCell = document.createElement('div');
                 emptyCell.className = 'h-24';
                 calendarGrid.appendChild(emptyCell);
             }
 
-            // Add cells for each day of the month
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const dayTasks = tasks.filter(task => task.dueDate === dateStr);
@@ -467,7 +443,6 @@
                 const dayCell = document.createElement('div');
                 dayCell.className = 'calendar-day h-24 p-1 border rounded cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700';
 
-                // Highlight today
                 if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
                     dayCell.classList.add('today', 'bg-indigo-100', 'dark:bg-indigo-900');
                 }
@@ -540,7 +515,6 @@
             dayTasksModal.classList.remove('hidden');
         }
         
-        // Edit Task Modal
         function openEditModal(taskId) {
             const task = tasks.find(t => t.id === taskId);
             if (!task) return;
@@ -573,7 +547,6 @@
             updateTaskCount();
             editTaskModal.classList.add('hidden');
             
-            // If we're in the calendar view, refresh it
             if (!calendarModal.classList.contains('hidden')) {
                 generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
             }
@@ -601,25 +574,21 @@
                 updateTaskCount();
                 editTaskModal.classList.add('hidden');
                 
-                // If we're in the calendar view, refresh it
                 if (!calendarModal.classList.contains('hidden')) {
                     generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
                 }
             }
         });
         
-        // Helper Functions
         function renderTasks() {
             taskList.innerHTML = '';
             
             let filteredTasks = [...tasks];
             
-            // Apply category filter
             if (currentFilter !== 'All') {
                 filteredTasks = filteredTasks.filter(task => task.category === currentFilter);
             }
             
-            // Sort tasks: overdue first, then by due date, then completed last
             filteredTasks.sort((a, b) => {
                 if (a.completed && !b.completed) return 1;
                 if (!a.completed && b.completed) return -1;
@@ -628,18 +597,14 @@
                 const bDue = new Date(b.dueDate + (b.dueTime ? 'T' + b.dueTime : ''));
                 const now = new Date();
                 
-                // Both tasks are overdue
                 if (aDue < now && bDue < now && !a.completed && !b.completed) {
-                    return aDue - bDue; // earlier overdue first
+                    return aDue - bDue;
                 }
                 
-                // Only a is overdue
                 if (aDue < now && !a.completed) return -1;
                 
-                // Only b is overdue
                 if (bDue < now && !b.completed) return 1;
                 
-                // Both are upcoming
                 if (!a.completed && !b.completed) {
                     return aDue - bDue;
                 }
@@ -708,7 +673,6 @@
                     updateProgress();
                     updateTaskCount();
                     
-                    // If we're in the calendar view, refresh it
                     if (!calendarModal.classList.contains('hidden')) {
                         generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
                     }
@@ -727,7 +691,6 @@
                 updateProgress();
                 updateTaskCount();
                 
-                // Show completion animation
                 const taskElement = document.getElementById(`task-${taskId}`);
                 if (taskElement) {
                     taskElement.classList.add('task-complete');
